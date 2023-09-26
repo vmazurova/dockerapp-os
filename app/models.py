@@ -34,6 +34,8 @@ class Contact(Model):
     contact_group = relationship("ContactGroup")
     gender_id = Column(Integer, ForeignKey("gender.id"), nullable=False)
     gender = relationship("Gender")
+    tool_id = Column(Integer, ForeignKey("tool.id"), nullable=True)
+    tool = relationship("Tool")
     note = Column(Text)
 
     def __repr__(self):
@@ -54,5 +56,13 @@ class Child(Model):
     parent_id = Column(Integer, ForeignKey("contact.id"), nullable=False)
     parent = relationship("Contact")
 
+    def __repr__(self):
+        return self.name
+
+class Tool(Model):
+    id = Column(Integer, primary_key=True)
+    name = Column(String(150), unique=True, nullable=False)
+    description = Column(String(560), nullable=True)
+    
     def __repr__(self):
         return self.name

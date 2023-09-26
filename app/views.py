@@ -6,7 +6,7 @@ from flask_appbuilder.models.group import aggregate_count
 from flask_appbuilder.models.sqla.interface import SQLAInterface
 
 from . import appbuilder, db
-from .models import Contact, ContactGroup, Gender, Child
+from .models import Contact, ContactGroup, Gender, Child, Tool
 
 def fill_gender():
     try:
@@ -20,7 +20,7 @@ def fill_gender():
 class ContactModelView(ModelView):
     datamodel = SQLAInterface(Contact)
 
-    list_columns = ["name", "personal_celphone", "birthday", "contact_group.name"]
+    list_columns = ["name", "personal_celphone", "birthday", "contact_group.name", "tool.name"]
 
     base_order = ("name", "asc")
     show_fieldsets = [
@@ -34,9 +34,19 @@ class ContactModelView(ModelView):
                     "personal_phone",
                     "personal_celphone",
                     "note",
+                    "tool"
                 ],
                 "expanded": False,
             },
+        ),
+        (
+            "Other",
+            {
+                "fields": [
+                    "tool",
+                    ],
+                "expanded": False,
+                }
         ),
     ]
 
@@ -55,6 +65,16 @@ class ContactModelView(ModelView):
                 "expanded": False,
             },
         ),
+        (
+
+            "Other",
+            {
+                "fields": [
+                    "tool",
+                    ],
+                "expanded": False,
+                }
+        ),
     ]
 
     edit_fieldsets = [
@@ -71,6 +91,16 @@ class ContactModelView(ModelView):
                 ],
                 "expanded": False,
             },
+        ),
+        (
+            "Other",
+            {
+                "fields": [
+                    "tool",
+                    ],
+                "expanded": False,
+                }
+
         ),
     ]
 
@@ -122,6 +152,23 @@ class ChildModelView(ModelView):
         ),
     ]
 
+class ToolModelView(ModelView):
+    datamodel = SQLAInterface(Tool)
+
+    list_columns = ["name",  "description"]
+
+    base_order = ("id", "asc")
+    show_fieldsets = [
+        ("Summary", {"fields": ["name", "description" ]}),
+    ]
+
+    add_fieldsets = [
+        ("Summary", {"fields": ["name", "description"]}),
+    ]
+
+    edit_fieldsets = [
+        ("Summary", {"fields": ["name", "description" ]}),
+    ]
 class GroupModelView(ModelView):
     datamodel = SQLAInterface(ContactGroup)
     related_views = [ContactModelView]
@@ -168,7 +215,10 @@ appbuilder.add_view(
     ContactModelView, "List Contacts", icon="fa-envelope", category="Contacts"
 )
 appbuilder.add_view(
-    ChildModelView, "List Children", icon="fa-envelope", category="Contacts"
+    ChildModelView, "List Children", icon="fa-child", category="Contacts"
+)
+appbuilder.add_view(
+    ToolModelView, "List Tools", icon="fa-toolbox", category="Contacts"
 )
 appbuilder.add_separator("Contacts")
 appbuilder.add_view(
