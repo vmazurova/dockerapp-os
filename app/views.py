@@ -95,7 +95,7 @@ class VyrobceModelView(ModelView):
 class VyrobekModelView(ModelView):
     datamodel = SQLAInterface(Vyrobek)
 
-    list_columns = ["name", "vyrobce.name"]
+    list_columns = ["name", "vyrobce"]
 
     base_order = ("name", "asc")
     show_fieldsets = [
