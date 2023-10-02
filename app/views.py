@@ -6,7 +6,7 @@ from flask_appbuilder.models.group import aggregate_count
 from flask_appbuilder.models.sqla.interface import SQLAInterface
 
 from . import appbuilder, db
-from .models import Contact, ContactGroup, Gender, Child, Tool
+from .models import Contact, ContactGroup, Gender, Vyrobce, Vyrobek
 
 def fill_gender():
     try:
@@ -20,7 +20,7 @@ def fill_gender():
 class ContactModelView(ModelView):
     datamodel = SQLAInterface(Contact)
 
-    list_columns = ["name", "personal_celphone", "birthday", "contact_group.name", "tool.name"]
+    list_columns = ["name", "personal_celphone", "birthday", "contact_group.name"]
 
     base_order = ("name", "asc")
     show_fieldsets = [
@@ -34,19 +34,9 @@ class ContactModelView(ModelView):
                     "personal_phone",
                     "personal_celphone",
                     "note",
-                    "tool"
                 ],
                 "expanded": False,
             },
-        ),
-        (
-            "Other",
-            {
-                "fields": [
-                    "tool",
-                    ],
-                "expanded": False,
-                }
         ),
     ]
 
@@ -65,16 +55,6 @@ class ContactModelView(ModelView):
                 "expanded": False,
             },
         ),
-        (
-
-            "Other",
-            {
-                "fields": [
-                    "tool",
-                    ],
-                "expanded": False,
-                }
-        ),
     ]
 
     edit_fieldsets = [
@@ -92,82 +72,42 @@ class ContactModelView(ModelView):
                 "expanded": False,
             },
         ),
-        (
-            "Other",
-            {
-                "fields": [
-                    "tool",
-                    ],
-                "expanded": False,
-                }
-
-        ),
     ]
 
-class ChildModelView(ModelView):
-    datamodel = SQLAInterface(Child)
+class VyrobceModelView(ModelView):
+    datamodel = SQLAInterface(Vyrobce)
 
-    list_columns = ["name", "birthday",  "parent"]
+    list_columns = ["name"]
 
     base_order = ("name", "asc")
     show_fieldsets = [
         ("Summary", {"fields": ["name" ]}),
-        (
-            "Personal Info",
-            {
-                "fields": [
-                    "birthday",
-                    "parent",
-                ],
-                "expanded": False,
-            },
-        ),
     ]
 
     add_fieldsets = [
         ("Summary", {"fields": ["name" ]}),
-        (
-            "Personal Info",
-            {
-                "fields": [
-                    "birthday",
-                    "parent",
-                ],
-                "expanded": False,
-            },
-        ),
     ]
 
     edit_fieldsets = [
         ("Summary", {"fields": ["name" ]}),
-        (
-            "Personal Info",
-            {
-                "fields": [
-                    "birthday",
-                    "parent",
-                ],
-                "expanded": False,
-            },
-        ),
     ]
 
-class ToolModelView(ModelView):
-    datamodel = SQLAInterface(Tool)
+class VyrobekModelView(ModelView):
+    datamodel = SQLAInterface(Vyrobek)
 
-    list_columns = ["name",  "description"]
+    list_columns = ["name", "vyrobce.name"]
 
-    base_order = ("id", "asc")
+    base_order = ("name", "asc")
     show_fieldsets = [
-        ("Summary", {"fields": ["name", "description" ]}),
+        ("Summary", {"fields": ["name", "vyrobce" ]}),
     ]
 
     add_fieldsets = [
-        ("Summary", {"fields": ["name", "description"]}),
+        ("Summary", {"fields": ["name", "vyrobce" ]}),
     ]
 
     edit_fieldsets = [
-        ("Summary", {"fields": ["name", "description" ]}),
+        ("Summary", {"fields": ["name", "vyrobce" ]}),
     ]
 class GroupModelView(ModelView):
     datamodel = SQLAInterface(ContactGroup)
@@ -215,10 +155,10 @@ appbuilder.add_view(
     ContactModelView, "List Contacts", icon="fa-envelope", category="Contacts"
 )
 appbuilder.add_view(
-    ChildModelView, "List Children", icon="fa-child", category="Contacts"
+    VyrobceModelView, "Vyrobce", icon="fa-child", category="Contacts"
 )
 appbuilder.add_view(
-    ToolModelView, "List Tools", icon="fa-toolbox", category="Contacts"
+    VyrobekModelView, "Vyrobky", icon="fa-toolbox", category="Contacts"
 )
 appbuilder.add_separator("Contacts")
 appbuilder.add_view(
