@@ -13,3 +13,4 @@ Run it::
     $ flask fab create-admin
     $ flask run
 
+    tesf
