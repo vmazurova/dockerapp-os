@@ -34,8 +34,6 @@ class Contact(Model):
     contact_group = relationship("ContactGroup")
     gender_id = Column(Integer, ForeignKey("gender.id"), nullable=False)
     gender = relationship("Gender")
-    tool_id = Column(Integer, ForeignKey("tool.id"), nullable=True)
-    tool = relationship("Tool")
     note = Column(Text)
 
     def __repr__(self):
@@ -49,20 +47,18 @@ class Contact(Model):
         date = self.birthday or mindate
         return datetime.datetime(date.year, 1, 1)
 
-class Child(Model):
+class Vyrobce(Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), unique=True, nullable=False)
-    birthday = Column(Date, nullable=True)
-    parent_id = Column(Integer, ForeignKey("contact.id"), nullable=False)
-    parent = relationship("Contact")
 
     def __repr__(self):
         return self.name
 
-class Tool(Model):
+class Vyrobek(Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(150), unique=True, nullable=False)
-    description = Column(String(560), nullable=True)
+    vyrobce_id = Column(Integer, ForeignKey("vyrobce.id"), nullable=False)
+    vyrobce = relationship("Vyrobce")
     
     def __repr__(self):
         return self.name
